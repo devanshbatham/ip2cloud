@@ -6,9 +6,9 @@
 <h4 align="center">Check IP addresses against known cloud provider IP address ranges using interval tree</h4>
 
 <p align="center">
-  <a href="#prerequisites">🔧 Prerequisites</a>  
-  <a href="#installation">⚙️ Installation</a>  
-  <a href="#usage">🔍 Usage</a> 
+  <a href="#installation">🔧 Installation</a>  
+  <a href="#usage">⚙️ Usage</a>  
+  <a href="#add-new-ip-ranges"> ⚡ Add New IP Ranges</a> 
   <br>
 </p>
 
