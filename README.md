@@ -3,7 +3,7 @@
   <br>
 </h1>
 
-<h4 align="center">Check IP addresses against known cloud provider IP address ranges using interval tree</h4>
+<h4 align="center">Check IP addresses against known cloud provider IP address ranges</h4>
 
 <p align="center">
   <a href="#installation">🔧 Installation</a>  
