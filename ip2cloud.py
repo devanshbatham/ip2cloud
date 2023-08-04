@@ -102,5 +102,5 @@ if __name__ == "__main__":
             for ip_to_check in ips_to_check:
                 cloud = find_cloud(ip_to_check, interval_tree)
                 if cloud:
-                    tqdm.write(f"[{cloud} IP Address] - {ip_to_check}")
+                    tqdm.write(f"[{cloud}] : {ip_to_check}")
                 pbar.update(1)
