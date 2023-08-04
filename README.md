@@ -104,7 +104,7 @@ If you want to add new IP ranges for cloud providers, follow these steps:
 ./setup.sh
 ```
 
-The new IP ranges will be updated in the `cloud_data.json` file, and `ip2cloud`` will use the updated data for IP lookups.
+The new IP ranges will be updated in the `cloud_data.json` file, and `ip2cloud` will use the updated data for IP lookups.
 
 
 ### Note
@@ -116,7 +116,7 @@ The new IP ranges will be updated in the `cloud_data.json` file, and `ip2cloud``
 
 # Supported Cloud Providers
 
-The data folder contains ranges for the mentioned cloud providers, feel free to add any number of providers' ranges. 
+The `data` folder contains IP address ranges for the following mentioned cloud providers, and you are welcome to add IP address ranges for any number of additional providers.
 
 - [x] Alibaba Cloud (Aliyun)
 - [x] Amazon Web Services (AWS)
