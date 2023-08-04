@@ -97,9 +97,7 @@ If no cloud provider is found for an IP address, it won't appear in the JSON or 
 If you want to add new IP ranges for cloud providers, follow these steps:
 
 1. Create a new text file in the `data` folder (e.g., `somecloud.txt`).
-
 2. Add the IP address ranges in CIDR notation to the new text file. Each range should be on a separate line.
-
 3. Run the setup script again:
 
 ```sh
