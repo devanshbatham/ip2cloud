@@ -111,7 +111,7 @@ The new IP ranges will be updated in the `cloud_data.json` file, and `ip2cloud` 
 
 - The script only supports IPv4 addresses.
 - Make sure to keep the `cloud_data.json` file updated with the latest IP address ranges for the cloud providers you want to check.
-- `cloud_data.json` should be stored in `/.config/.cloud-ranges` folder after running `setup.sh`
+- `cloud_data.json` should be stored in `~/.config/.cloud-ranges` folder after running `setup.sh`
 
 
 # Supported Cloud Providers
