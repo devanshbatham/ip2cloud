@@ -12,7 +12,7 @@
   <br>
 </p>
 
-![ip2cloud](https://github.com/devanshbatham/ip2cloud/blob/main/static/ip2cloud.png?raw=true)
+![ip2cloud](https://github.com/devanshbatham/ip2cloud/blob/main/static/banner.png?raw=true)
 
 # Prerequisites
 
