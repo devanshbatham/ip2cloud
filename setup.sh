@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Rename the ip2cloud.py file to watson
+# Rename the ip2cloud.py file to ip2cloud
 mv ip2cloud.py ip2cloud
 
 python3 parse_data.py
