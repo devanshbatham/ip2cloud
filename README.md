@@ -98,10 +98,10 @@ If you want to add new IP ranges for cloud providers, follow these steps:
 
 1. Create a new text file in the `data` folder (e.g., `somecloud.txt`).
 2. Add the IP address ranges in CIDR notation to the new text file. Each range should be on a separate line.
-3. Run the setup script again:
+3. Run the parse_data script:
 
 ```sh
-./setup.sh
+python3 parse_data.py
 ```
 
 The new IP ranges will be updated in the `cloud_data.json` file, and `ip2cloud` will use the updated data for IP lookups.
