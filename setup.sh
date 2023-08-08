@@ -3,6 +3,9 @@
 # Rename the ip2cloud.py file to ip2cloud
 mv ip2cloud.py ip2cloud
 
+# Install dependencies
+pip install --upgrade intervaltree tqdm
+
 python3 parse_data.py
 
 # Move the ip2cloud file to /usr/local/bin
