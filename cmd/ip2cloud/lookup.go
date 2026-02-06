@@ -140,7 +140,7 @@ func runLookup(args []string) {
 		w := bufio.NewWriterSize(os.Stdout, 256*1024)
 		for batch := range resCh {
 			for _, r := range batch {
-				fmt.Fprintf(w, "[%s] : %s\n", r.provider, r.ip)
+				fmt.Fprintf(w, "[%s] %s\n", r.provider, r.ip)
 			}
 		}
 		if err := w.Flush(); err != nil {
