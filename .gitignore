@@ -1,0 +1,11 @@
+# Binary
+/ip2cloud
+*.exe
+
+# Test files
+ips.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp

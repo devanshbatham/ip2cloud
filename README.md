@@ -6,119 +6,188 @@
 <h4 align="center">Check IP addresses against known cloud provider IP address ranges</h4>
 
 <p align="center">
-  <a href="#installation">🔧 Installation</a>  
-  <a href="#usage">⚙️ Usage</a>  
-  <a href="#add-new-ip-ranges"> ⚡ Add New IP Ranges</a> 
+  <a href="#installation">Installation</a>  
+  <a href="#usage">Usage</a>  
+  <a href="#commands">Commands</a>  
+  <a href="#adding-custom-providers">Adding Providers</a>  
+  <a href="#benchmarks">Benchmarks</a>
   <br>
 </p>
 
 ![ip2cloud](https://github.com/devanshbatham/ip2cloud/blob/main/static/banner.png?raw=true)
 
-# Prerequisites
-
-- Python 3.x
-- intervaltree library (`pip install intervaltree`)
-- tqdm library (`pip install tqdm`)
-
-# Installation
-
+## Installation
 
 ```sh
-git clone https://github.com/devanshbatham/ip2cloud
-cd ip2cloud
-chmod +x setup.sh
-./setup.sh
+go install github.com/devanshbatham/ip2cloud/cmd/ip2cloud@latest
 ```
 
+No other setup needed. Cloud provider IP ranges are embedded in the binary and the trie is built automatically on first run.
 
-Now, you can use `ip2cloud` from the command line to check IP addresses against known cloud provider IP address ranges.
-
-
-# Usage
-
-
+## Usage
 
 ```sh
-cat input_ips.txt | ip2cloud
+cat ips.txt | ip2cloud
 ```
 
-The script will process the provided IP addresses and display the corresponding cloud provider for each IP address. Optionally, you can use the `-j` or `--json` flag to print the output in JSON format.
+```sh
+ip2cloud 1.2.3.4 5.6.7.8
+```
 
+```sh
+ip2cloud -p aws,azure < ips.txt
+```
 
+```sh
+ip2cloud -j < ips.txt
+```
 
 ### Example
 
-Suppose you have a file named `input_ips.txt` with the following IP addresses:
+Given a file `ips.txt`:
 
 ```
 59.82.33.201
-63.32.40.140   
+63.32.40.140
 63.33.205.240
-64.4.8.90 
+64.4.8.90
 64.4.8.67
 ```
 
-Run the script as follows:
+Text output:
 
-```sh
-(~)>> cat input_ips.txt | ip2cloud
+```
+$ cat ips.txt | ip2cloud
 
 [aliyun] : 59.82.33.201
-[aws] : 63.32.40.140                         
-[aws] : 63.33.205.240        
-[azure] : 64.4.8.67 
-[azure] : 64.4.8.90   
+[aws] : 63.32.40.140
+[aws] : 63.33.205.240
+[azure] : 64.4.8.67
+[azure] : 64.4.8.90
 ```
 
-- with `--json` or `-j` flag: 
+JSON output:
 
-
-```sh
-(~)>> cat input_ips.txt | ip2cloud -j
+```
+$ cat ips.txt | ip2cloud -j
 
 {
-  "aliyun": [
-    "59.82.33.201"
-  ],
-  "aws": [
-    "63.32.40.140",
-    "63.33.205.240"
-  ],
-  "azure": [
-    "64.4.8.90",
-    "64.4.8.67"
-  ]
+    "aliyun": [
+        "59.82.33.201"
+    ],
+    "aws": [
+        "63.32.40.140",
+        "63.33.205.240"
+    ],
+    "azure": [
+        "64.4.8.90",
+        "64.4.8.67"
+    ]
 }
 ```
 
-If no cloud provider is found for an IP address, it won't appear in the JSON or standard output.
+IPs with no matching cloud provider are omitted from the output.
 
+## Commands
 
-# Add New IP Ranges
+| Command | Description |
+|---------|-------------|
+| `ip2cloud` | Lookup IPs from stdin or args (default) |
+| `ip2cloud build` | Rebuild binary trie (auto-seeds from embedded data if no `-seed` flag) |
+| `ip2cloud build -seed ./data` | Seed from a custom directory of `.txt` files |
+| `ip2cloud add <provider> [-f file] [cidrs...]` | Add CIDR ranges to a provider |
+| `ip2cloud list` | List providers and range counts |
+| `ip2cloud version` | Print version |
 
-If you want to add new IP ranges for cloud providers, follow these steps:
+## Lookup Flags
 
-1. Create a new text file in the `data` folder (e.g., `somecloud.txt`).
-2. Add the IP address ranges in CIDR notation to the new text file. Each range should be on a separate line.
-3. Run the parse_data script:
+| Flag | Description |
+|------|-------------|
+| `-p`, `-provider` | Comma-separated provider filter (e.g. `aws,gcp`) |
+| `-j`, `-json` | JSON output |
+| `-w` | Worker count (default: NumCPU) |
 
-```sh
-python3 parse_data.py
+## Data Storage
+
+Provider data files and the binary trie are stored under `~/.config/ip2cloud/`:
+
+```
+~/.config/ip2cloud/
+  data/          # provider .txt files (one CIDR per line)
+  ip2cloud.bin   # compiled binary trie
 ```
 
-The new IP ranges will be updated in the `cloud_data.json` file, and `ip2cloud` will use the updated data for IP lookups.
+The trie is built automatically on first lookup. Run `ip2cloud build` to rebuild it manually after modifying provider data.
 
+## Adding Custom Providers
 
-### Note
+You can add your own cloud provider or update existing ones using the `add` command.
 
-- The script only supports IPv4 addresses.
-- Make sure to keep the `cloud_data.json` file updated with the latest IP address ranges for the cloud providers you want to check.
-- `cloud_data.json` should be stored in `~/.config/.cloud-ranges` folder after running `setup.sh`
+### CIDR format
 
+Provider data files are plain text with one IPv4 CIDR per line. Lines starting with `#` are ignored. Example:
 
-# Supported Cloud Providers
+```
+# My custom provider ranges
+10.100.0.0/16
+10.200.0.0/14
+172.20.0.0/15
+```
 
-The `data` folder contains IP address ranges for the following mentioned cloud providers, and you are welcome to add IP address ranges for any number of additional providers.
+> **Note:** Only IPv4 CIDRs are supported. IPv6 entries are silently skipped.
+
+### Adding ranges via CLI
+
+```sh
+# Add CIDRs as arguments
+ip2cloud add myprovider 10.100.0.0/16 10.200.0.0/14
+
+# Add CIDRs from a file
+ip2cloud add myprovider -f ranges.txt
+
+# Add CIDRs from stdin
+cat ranges.txt | ip2cloud add myprovider -f -
+
+# Add without auto-rebuilding the trie
+ip2cloud add myprovider -build=false 10.100.0.0/16
+```
+
+The trie is rebuilt automatically after adding ranges (disable with `-build=false`).
+
+### Adding ranges manually
+
+You can also create or edit provider files directly under `~/.config/ip2cloud/data/`:
+
+```sh
+# Create a new provider
+echo "10.100.0.0/16" > ~/.config/ip2cloud/data/myprovider.txt
+
+# Rebuild the trie after manual edits
+ip2cloud build
+```
+
+The file name (without `.txt`) becomes the provider name used in lookup output.
+
+### Seeding from a directory
+
+To replace all provider data from a custom directory:
+
+```sh
+ip2cloud build -seed /path/to/my/data/
+```
+
+The directory should contain `.txt` files named after each provider (e.g., `aws.txt`, `myprovider.txt`), each with one CIDR per line.
+
+## Benchmarks
+
+See [benchmark.md](benchmark.md) for the full benchmark suite and instructions.
+
+## Limitations
+
+- IPv4 only (IPv6 CIDRs are skipped)
+- Output order is nondeterministic when using multiple workers
+
+## Supported Cloud Providers
 
 - [x] Alibaba Cloud (Aliyun)
 - [x] Amazon Web Services (AWS)
@@ -132,4 +201,3 @@ The `data` folder contains IP address ranges for the following mentioned cloud p
 - [x] Oracle Cloud
 - [x] Tencent Cloud
 - [x] UCloud
-
