@@ -96,6 +96,7 @@ IPs with no matching cloud provider are omitted from the output.
 | `ip2cloud build` | Rebuild binary trie (auto-seeds from embedded data if no `-seed` flag) |
 | `ip2cloud build -seed ./data` | Seed from a custom directory of `.txt` files |
 | `ip2cloud add <provider> [-f file] [cidrs...]` | Add CIDR ranges to a provider |
+| `ip2cloud remove <provider>` | Remove a provider and its ranges |
 | `ip2cloud list` | List providers and range counts |
 | `ip2cloud version` | Print version |
 
