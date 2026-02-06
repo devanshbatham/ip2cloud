@@ -111,6 +111,14 @@ type ProviderInfo struct {
 	RangeCount int
 }
 
+func (s *Store) RemoveProvider(provider string) error {
+	path := filepath.Join(s.DataDir, provider+".txt")
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return fmt.Errorf("provider '%s' not found", provider)
+	}
+	return os.Remove(path)
+}
+
 func (s *Store) Build() (*trie.Trie, error) {
 	entries, err := os.ReadDir(s.DataDir)
 	if err != nil {
