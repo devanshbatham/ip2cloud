@@ -34,7 +34,7 @@ Remove Flags:
 
 Examples:
   cat ips.txt | ip2cloud              Lookup IPs from stdin
-  ip2cloud 8.8.8.8 3.5.1.1           Lookup specific IPs
+  ip2cloud 8.8.8.8 3.5.1.1            Lookup specific IPs
   ip2cloud -p aws < ips.txt           Only show AWS matches
   ip2cloud -j < ips.txt               Output as JSON
   ip2cloud add mycloud 10.0.0.0/8     Add a CIDR range
